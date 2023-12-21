@@ -1,0 +1,54 @@
+using System;
+using System.IO;
+using System.Management;
+
+class Program
+{
+    static void Main()
+    {
+        string storedUniqueIdentifier = ReadStoredUniqueIdentifier();
+
+        if (string.IsNullOrEmpty(storedUniqueIdentifier))
+        {
+            string uniqueIdentifier = GetUniqueHardwareId();
+            WriteUniqueIdentifier(uniqueIdentifier);
+            Console.WriteLine("Program registered to this device.");
+        }
+        else
+        {
+            string currentUniqueIdentifier = GetUniqueHardwareId();
+
+            if (currentUniqueIdentifier == storedUniqueIdentifier)
+            {
+                Console.WriteLine("Access granted.");
+            }
+            else
+            {
+                Console.WriteLine("Access denied. This program is registered to another device.");
+            }
+        }
+    }
+
+    static string GetUniqueHardwareId()
+    {
+        // function to get HWID
+        return "UniqueHardwareId";
+    }
+
+    static string ReadStoredUniqueIdentifier()
+    {
+        try
+        {
+            return File.ReadAllText("UniqueIdentifier.txt");
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    static void WriteUniqueIdentifier(string uniqueIdentifier)
+    {
+        File.WriteAllText("UniqueIdentifier.txt", uniqueIdentifier);
+    }
+}

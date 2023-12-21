@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Management;
+using System.Management; // Add reference to System.Management
 
 class Program
 {
@@ -31,8 +31,12 @@ class Program
 
     static string GetUniqueHardwareId()
     {
-        // function to get HWID
-        return "UniqueHardwareId";
+        string drive = "C";
+        ManagementObject disk = new ManagementObject("win32_logicaldisk.deviceid=\"" + drive + ":\"");
+        disk.Get();
+    
+        string volumeSerial = disk["VolumeSerialNumber"].ToString();
+        return volumeSerial;
     }
 
     static string ReadStoredUniqueIdentifier()
